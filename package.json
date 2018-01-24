@@ -7,6 +7,6 @@
     "upload-button": "espruino -b 115200 button.js"
   },
   "devDependencies": {
-    "espruino": "0.0.32"
+    "espruino": "0.0.36"
   }
 }

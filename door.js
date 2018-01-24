@@ -18,8 +18,10 @@ function openDoor() {
 
 wifi.stopAP();
 wifi.setHostname('door');
-wifi.on('connected', function() {
+wifi.on('connected', function(wifiEvt) {
+  console.log('connected', wifiEvt);
   http.createServer(function (req, res) {
+    console.log('open');
     openDoor();
     res.writeHead(200);
     res.end('');
