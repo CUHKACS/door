@@ -4,35 +4,28 @@ var http = require("http");
 
 var password = require('./password.js');
 
-var doorMutex = false;
-function openDoor() {
-  if(!doorMutex) {
-    doorMutex = true;
+var doorOpening = false;
+function openDoor(req, res) {
+  if(!doorOpening) {
+    console.log('open');
+    doorOpening = true;
     servo.move(0.4,800);
     setTimeout(function() {
       servo.move(0,800);
-      doorMutex = false;
+      doorOpening = false;
     }, 500);
   }
+  res.writeHead(200);
+  res.end('Door Opened');
 }
 
-wifi.stopAP();
-wifi.setHostname('door');
-wifi.on('connected', function(wifiEvt) {
-  console.log('connected', wifiEvt);
-  http.createServer(function (req, res) {
-    console.log('open');
-    openDoor();
-    res.writeHead(200);
-    res.end('');
-  }).listen(37564);
-});
-wifi.connect('ACSOC', {password: password.ACSOC});
-wifi.save();
+wifi.connect(
+  'ACSOC', {password: password.ACSOC},
+  function(wifiIP) {
+    console.log('connected', wifiIP);
+    servo.move(0,1000);
+    http.createServer(openDoor).listen(37564);
+  }
+);
 
-E.on('init', function() {
-  servo.move(0,1000);
-  wifi.restore();
-});
-
-save();
+wifi.save()
