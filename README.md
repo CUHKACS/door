@@ -17,6 +17,8 @@ Prerequisites:
 
 Follow the official guide from espruino to flash the firmware using `esptool.py`.
 
+**Gotcha:** Espruino 1v95 does not work with the NodeMCU boards, it will hang on reset.
+
 ### Hacking
 
 Prerequisites:
