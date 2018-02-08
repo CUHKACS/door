@@ -19,13 +19,14 @@ function openDoor(req, res) {
   res.end('Door Opened');
 }
 
-wifi.connect(
-  'ACSOC', {password: password.ACSOC},
-  function(wifiIP) {
-    console.log('connected', wifiIP);
-    servo.move(0,1000);
+function onInit() {
+  servo.move(0,1000);
+  wifi.stopAP();
+  wifi.connect('ACSOC', {password: password.ACSOC}, _ => {
+    console.log('wifi connected');
     http.createServer(openDoor).listen(37564);
-  }
-);
+  });
+}
 
-wifi.save()
+save();
+

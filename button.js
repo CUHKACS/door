@@ -8,17 +8,16 @@ function buttonPress() {
   http.get('http://door.acsoc:37564');
 }
 
-wifi.connect(
-  'ACSOC', {password: password.ACSOC},
-  function(wifiIP) {
-    console.log('connected', wifiIP);
-    pinMode(NodeMCU.D7, 'input_pullup');
+function onInit() {
+  pinMode(NodeMCU.D7, 'input_pullup');
+  wifi.stopAP();
+  wifi.connect('ACSOC', {password: password.ACSOC}, _ => {
+    console.log('wifi connected');
     setWatch(
       buttonPress, NodeMCU.D7,
       { repeat: true, edge: 'falling', debounce: 80 }
     );
-  }
-);
+  });
+}
 
-wifi.save();
-
+save();
